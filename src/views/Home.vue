@@ -2,136 +2,122 @@
   <!-- <img src="@/assets/images/1.jpg" alt=""> -->
   <div class="container">
     <section class="gallery">
-      <div class="frame">
-        <div class="frame__content">
-          <h2>Beautiful World</h2>
+      <section class="gallery">
+        <div
+          v-for="frame in frames"
+          :key="frame.src || frame.content"
+          class="frame"
+          :class="{
+            frame_bg: frame.type === 'image' || frame.type === 'video',
+          }"
+        >
+          <div
+            class="frame__content"
+            :class="frame.position ? `text-${frame.position}` : ''"
+          >
+            <template v-if="frame.type === 'text'">
+              <h3>{{ frame.content }}</h3>
+              <p v-if="frame.description">{{ frame.description }}</p>
+            </template>
+
+            <img
+              v-if="frame.type === 'image'"
+              :src="frame.src"
+              :class="['frame-media', `frame-media_${frame.position || ''}`]"
+            />
+
+            <video
+              v-if="frame.type === 'video'"
+              :src="frame.src"
+              :class="['frame-media', `frame-media_${frame.position || ''}`]"
+              autoplay
+              loop
+              muted
+            ></video>
+          </div>
         </div>
-      </div>
-
-      <div class="frame">
-        <div class="frame__content">
-          <img
-            class="frame-media frame-media_left"
-            src="@/assets/images/1.jpg"
-          />
-        </div>
-      </div>
-
-      <div class="frame frame_bg">
-        <div class="frame__content">
-          <video
-            class="frame-media frame-media_right"
-            src="@/assets/media/video_optimized.mp4"
-            autoplay
-            loop
-            muted
-          ></video>
-        </div>
-      </div>
-
-      <div class="frame"></div>
-
-      <div class="frame">
-        <div class="frame__content text-right">
-          <h3>Pure planet</h3>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur elit adipisicing. Nemo
-            fugit, rerum dolorem assumenda consequatur dicta error iure
-            laboriosam temporibus.
-          </p>
-        </div>
-      </div>
-
-      <div class="frame frame_bg">
-        <div class="frame__content">
-          <img
-            class="frame-media frame-media_left"
-            src="@/assets/images/2.jpg"
-          />
-        </div>
-      </div>
-
-      <div class="frame"></div>
-
-      <div class="frame frame_bg">
-        <div class="frame__content">
-          <img
-            class="frame-media frame-media_right"
-            src="@/assets/images/3.jpg"
-          />
-        </div>
-      </div>
-
-      <div class="frame"></div>
-
-      <div class="frame">
-        <div class="frame__content text-left">
-          <h3>Ask the Mountains</h3>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur elit. Rerum dolorem
-            assumenda consequatur dicta error iure laboriosam temporibus omnis
-            quae eaque aliquam esse unde accusamus dolores non soluta.
-          </p>
-        </div>
-      </div>
-
-      <div class="frame frame_bg">
-        <div class="frame__content">
-          <img
-            class="frame-media frame-media_right"
-            src="@/assets/images/4.jpg"
-          />
-        </div>
-      </div>
-
-      <div class="frame">
-        <div class="frame__content">
-          <video
-            class="frame-media frame-media_left"
-            src="@/assets/media/video_optimized.mp4"
-            autoplay
-            loop
-            muted
-          ></video>
-        </div>
-      </div>
-
-      <div class="frame"></div>
-      <div class="frame"></div>
-
-      <div class="frame frame_bg">
-        <div class="frame__content">
-          <img
-            class="frame-media frame-media_right"
-            src="@/assets/images/5.jpg"
-          />
-        </div>
-      </div>
-
-      <div class="frame frame_bg">
-        <div class="frame__content">
-          <video
-            class="frame-media"
-            src="@/assets/media/video_optimized.mp4"
-            autoplay
-            loop
-            muted
-          ></video>
-        </div>
-      </div>
-
-      <div class="frame"></div>
-      <div class="frame"></div>
-
-      <div class="frame">
-        <div class="frame__content">last</div>
-      </div>
+      </section>
     </section>
   </div>
 </template>
 <script>
 export default {
   name: "home-page",
+  data() {
+    return {
+      frames: [
+        { type: "text", content: "Beautiful World" },
+        {
+          type: "image",
+          src: require("@/assets/images/1.jpg"),
+          position: "left",
+        },
+        {
+          type: "video",
+          src: require("@/assets/media/video_optimized.mp4"),
+          position: "right",
+        },
+        {},
+        {
+          type: "text",
+          content: "Pure planet",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur elit adipisicing. Nemo fugit, rerum dolorem assumenda consequatur dicta error iure laboriosam temporibus.",
+          position: "right",
+        },
+        {
+          type: "image",
+          src: require("@/assets/images/2.jpg"),
+          position: "left",
+        },
+        {},
+        {
+          type: "image",
+          src: require("@/assets/images/3.jpg"),
+          position: "right",
+        },
+        {},
+        {
+          type: "text",
+          content: "Ask the Mountains",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur elit adipisicing. Nemo fugit, rerum dolorem assumenda consequatur dicta error iure laboriosam temporibus.",
+          position: "left",
+        },
+        {
+          type: "image",
+          src: require("@/assets/images/4.jpg"),
+          position: "right",
+        },
+        {
+          type: "video",
+          src: require("@/assets/media/video_optimized.mp4"),
+          position: "left",
+        },
+        {},
+        {
+          type: "image",
+          src: require("@/assets/images/5.jpg"),
+          position: "right",
+        },
+        {
+          type: "video",
+          src: require("@/assets/media/video_optimized.mp4"),
+          position: "center",
+        },
+        // {},
+        {},
+        {
+          type: "text",
+          content: "last frame",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur elit adipisicing. Nemo fugit, rerum dolorem assumenda consequatur dicta error iure laboriosam temporibus.",
+          position: "center",
+        },
+      ],
+    };
+  },
+
   mounted() {
     let zSpacing = -1000,
       lastPos = zSpacing / 5,
@@ -140,14 +126,15 @@ export default {
         (_, i) => i * zSpacing + zSpacing
       ); // инициализируем с начальными значениями
 
+    console.log($frames[$frames.length]);
     window.onscroll = () => {
       let top = document.documentElement.scrollTop,
         delta = lastPos - top;
 
       lastPos = top;
 
-      $frames.forEach((el, i) => {
-        zVals[i] += delta * -5.5; // обновляем, а не добавляем новые значения
+      $frames.forEach((_, i) => {
+        zVals[i] += delta * -5;
         let frame = $frames[i],
           transform = `translateZ(${zVals[i]}px)`,
           opacity = zVals[i] < Math.abs(zSpacing) / 1.8 ? 1 : 0;
@@ -266,10 +253,10 @@ h4 {
   background-size: cover;
 }
 .frame-media_left {
-  right: calc(var(--side-small) / 2 * var(--index) + var(--gutter));
+  right: calc(var(--side-small) / 2 * var(--index) + var(--gutter)) !important;
 }
 .frame-media_right {
-  left: calc(var(--side-small) / 2 * var(--index) + var(--gutter));
+  left: calc(var(--side-small) / 2 * var(--index) + var(--gutter)) !important;
 }
 .frame_bg {
   background-color: rgb(0 0 0 / 0.87);
@@ -279,10 +266,10 @@ video.frame-media {
   height: calc(var(--index) * var(--side-small));
 }
 video.frame-media_right {
-  left: calc(var(--side-big) / 2 * var(--index) + var(--gutter));
+  left: calc(var(--side-big) / 2 * var(--index) + var(--gutter)) !important;
 }
 video.frame-media_left {
-  right: calc(var(--side-big) / 2 * var(--index) + var(--gutter));
+  right: calc(var(--side-big) / 2 * var(--index) + var(--gutter)) !important;
 }
 .text-right > * {
   position: relative;
