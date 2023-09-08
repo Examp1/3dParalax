@@ -47,7 +47,7 @@
           <img
             class="frame-media frame-media_left"
             src="@/assets/images/2.jpg"
-          >
+          />
         </div>
       </div>
 
@@ -58,7 +58,7 @@
           <img
             class="frame-media frame-media_right"
             src="@/assets/images/3.jpg"
-          >
+          />
         </div>
       </div>
 
@@ -80,7 +80,7 @@
           <img
             class="frame-media frame-media_right"
             src="@/assets/images/4.jpg"
-          >
+          />
         </div>
       </div>
 
@@ -104,7 +104,7 @@
           <img
             class="frame-media frame-media_right"
             src="@/assets/images/5.jpg"
-          >
+          />
         </div>
       </div>
 
@@ -136,23 +136,22 @@ export default {
     let zSpacing = -1000,
       lastPos = zSpacing / 5,
       $frames = document.querySelectorAll(".frame"),
-      zVals = []; 
-  
+      zVals = Array.from({ length: $frames.length }).map(
+        (_, i) => i * zSpacing + zSpacing
+      ); // инициализируем с начальными значениями
 
-    window.onscroll = () =>  { 
-      let top = document.documentElement.scrollTop, 
+    window.onscroll = () => {
+      let top = document.documentElement.scrollTop,
         delta = lastPos - top;
 
       lastPos = top;
 
-     
       $frames.forEach((el, i) => {
-       
-        zVals.push(i * zSpacing + zSpacing);
-        zVals[i] += delta * -5.5;
+        zVals[i] += delta * -5.5; // обновляем, а не добавляем новые значения
         let frame = $frames[i],
           transform = `translateZ(${zVals[i]}px)`,
           opacity = zVals[i] < Math.abs(zSpacing) / 1.8 ? 1 : 0;
+
         frame.setAttribute(
           "style",
           `transform: ${transform}; opacity: ${opacity}`
