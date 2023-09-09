@@ -1,7 +1,7 @@
 <template>
   <!-- <img src="@/assets/images/1.jpg" alt=""> -->
-  <div class="container">
-    <section class="gallery">
+  <div class="anim3d">
+    <div class="container">
       <section class="gallery">
         <div
           v-for="frame in frames"
@@ -37,7 +37,7 @@
           </div>
         </div>
       </section>
-    </section>
+    </div>
   </div>
 </template>
 <script>
@@ -185,12 +185,12 @@ export default {
 }
 
 /* Скрываем Scrollbar */
-body {
-  scrollbar-width: none; /* Firefox */
-}
-body::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
-}
+// body {
+//   scrollbar-width: none; /* Firefox */
+// }
+// body::-webkit-scrollbar {
+//   display: none; /* Safari and Chrome */
+// }
 
 @font-face {
   font-family: raleway_c;
@@ -202,7 +202,7 @@ body::-webkit-scrollbar {
   src: url(@/assets/fonts/raleway-v22-cyrillic-100.woff2);
   font-weight: 100;
 }
-body {
+.anim3d {
   background-color: #000;
   color: #fff;
   font-size: calc(var(--index) * 0.8);
