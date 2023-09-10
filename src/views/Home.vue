@@ -1,11 +1,11 @@
 <template>
   <!-- <img src="@/assets/images/1.jpg" alt=""> -->
-  <div class="anim3d">
+  <div class="anim3d" :style="cssVariables">
     <div class="container">
       <section class="gallery">
         <div
-          v-for="frame in frames"
-          :key="frame.src || frame.content"
+          v-for="(frame, idx) in frames"
+          :key="frame.src + '' + idx || frame.content + '' + idx"
           class="frame"
           :class="{
             frame_bg: frame.type === 'image' || frame.type === 'video',
@@ -38,6 +38,8 @@
         </div>
       </section>
     </div>
+    <img class="soundbutton paused" src="@/assets/images/sound.gif" alt="Alt" />
+    <audio class="audio" src="@/assets/media/ambient.mp3" loop></audio>
   </div>
 </template>
 <script>
@@ -57,7 +59,7 @@ export default {
           src: require("@/assets/media/video_optimized.mp4"),
           position: "right",
         },
-        {},
+        // {},
         {
           type: "text",
           content: "Pure planet",
@@ -70,13 +72,13 @@ export default {
           src: require("@/assets/images/2.jpg"),
           position: "left",
         },
-        {},
+        // {},
         {
           type: "image",
           src: require("@/assets/images/3.jpg"),
           position: "right",
         },
-        {},
+        // {},
         {
           type: "text",
           content: "Ask the Mountains",
@@ -94,7 +96,7 @@ export default {
           src: require("@/assets/media/video_optimized.mp4"),
           position: "left",
         },
-        {},
+        // {},
         {
           type: "image",
           src: require("@/assets/images/5.jpg"),
@@ -106,7 +108,7 @@ export default {
           position: "center",
         },
         // {},
-        {},
+        // {},
         {
           type: "text",
           content: "last frame",
@@ -118,6 +120,14 @@ export default {
     };
   },
 
+  computed: {
+    cssVariables() {
+      return {
+        "--depth": (this.frames.length * 200 ) + 500 + "px",
+      };
+    },
+  },
+
   mounted() {
     let zSpacing = -1000,
       lastPos = zSpacing / 5,
@@ -126,7 +136,6 @@ export default {
         (_, i) => i * zSpacing + zSpacing
       ); // инициализируем с начальными значениями
 
-    console.log($frames[$frames.length]);
     window.onscroll = () => {
       let top = document.documentElement.scrollTop,
         delta = lastPos - top;
@@ -134,7 +143,7 @@ export default {
       lastPos = top;
 
       $frames.forEach((_, i) => {
-        zVals[i] += delta * -5;
+        zVals[i] += delta * -5.5;
         let frame = $frames[i],
           transform = `translateZ(${zVals[i]}px)`,
           opacity = zVals[i] < Math.abs(zSpacing) / 1.8 ? 1 : 0;
@@ -180,17 +189,17 @@ export default {
   --gutter: 30px;
   --side-small: 26;
   --side-big: 36;
-  --depth: 4000px;
+  // --depth: 4000px;
   --transition: 0.75s cubic-bezier(0.075, 0.5, 0, 1);
 }
 
 /* Скрываем Scrollbar */
-// body {
-//   scrollbar-width: none; /* Firefox */
-// }
-// body::-webkit-scrollbar {
-//   display: none; /* Safari and Chrome */
-// }
+body {
+  scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
 
 @font-face {
   font-family: raleway_c;
@@ -253,7 +262,7 @@ h4 {
   background-size: cover;
 }
 .frame-media_left {
-  right: calc(var(--side-small) / 2 * var(--index) + var(--gutter)) !important;
+  right: calc(var(--side-small) * var(--index) + var(--gutter)) !important;
 }
 .frame-media_right {
   left: calc(var(--side-small) / 2 * var(--index) + var(--gutter)) !important;
