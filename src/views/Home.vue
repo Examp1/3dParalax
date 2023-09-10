@@ -262,7 +262,7 @@ h4 {
   background-size: cover;
 }
 .frame-media_left {
-  right: calc(var(--side-small) * var(--index) + var(--gutter)) !important;
+  right: calc(var(--side-small) / 2 * var(--index) + var(--gutter)) !important;
 }
 .frame-media_right {
   left: calc(var(--side-small) / 2 * var(--index) + var(--gutter)) !important;
