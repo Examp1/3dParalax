@@ -62,7 +62,7 @@ export default {
         // {},
         {
           type: "text",
-          content: "Pure planet",
+          content: "Lorem ipsum",
           description:
             "Lorem ipsum dolor sit amet, consectetur elit adipisicing. Nemo fugit, rerum dolorem assumenda consequatur dicta error iure laboriosam temporibus.",
           position: "right",
