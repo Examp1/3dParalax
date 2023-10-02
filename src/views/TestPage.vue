@@ -11,8 +11,10 @@
 </template>
 
 <script>
+
 export default {
   mounted() {
+
     let zSpacing = -1000,
       lastPos = zSpacing / 5,
       $frames = document.querySelectorAll(".frame"),

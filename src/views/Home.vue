@@ -1,12 +1,13 @@
 <template>
   <!-- <img src="@/assets/images/1.jpg" alt=""> -->
-  <div class="anim3d" :style="cssVariables">
-    <div class="container">
-      <section class="gallery">
+  <div class="anim3d">
+    <div class="container" ref="main">
+      <section class="gallery" ref="innerWrp">
         <div
           v-for="(frame, idx) in frames"
           :key="frame.src + '' + idx || frame.content + '' + idx"
           class="frame"
+          ref="frame"
           :class="{
             frame_bg: frame.type === 'image' || frame.type === 'video',
           }"
@@ -43,6 +44,9 @@
   </div>
 </template>
 <script>
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 export default {
   name: "home-page",
   data() {
@@ -117,48 +121,51 @@ export default {
           position: "center",
         },
       ],
+      zSpacing: -1000,
+      zVals: [],
     };
   },
 
   computed: {
-    cssVariables() {
-      return {
-        "--depth": (this.frames.length * 200 ) + 500 + "px",
-      };
+    animateHeight() {
+      return this.frames.length;
     },
   },
 
   mounted() {
-    let zSpacing = -1000,
-      lastPos = zSpacing / 5,
-      $frames = document.querySelectorAll(".frame"),
-      zVals = Array.from({ length: $frames.length }).map(
-        (_, i) => i * zSpacing + zSpacing
-      ); // инициализируем с начальными значениями
+    // const frames = document.querySelectorAll(".frame");
+    this.zVals = Array.from({ length: frames.length }).map(
+      (_, i) => i * this.zSpacing + this.zSpacing
+    );
 
-    window.onscroll = () => {
-      let top = document.documentElement.scrollTop,
-        delta = lastPos - top;
+    const mainWrp = this.$refs.main,
+      innerWrp = this.$refs.innerWrp;
 
-      lastPos = top;
+    const scrollZ = Math.abs(this.zVals[this.zVals.length - 1]) + 500;
 
-      $frames.forEach((_, i) => {
-        zVals[i] += delta * -5.5;
-        let frame = $frames[i],
-          transform = `translateZ(${zVals[i]}px)`,
-          opacity = zVals[i] < Math.abs(zSpacing) / 1.8 ? 1 : 0;
+    gsap.to(innerWrp, {
+      translateZ: scrollZ,
+      scrollTrigger: {
+        scrub: 2,
+        pin: ".container",
+        trigger: mainWrp,
+        start: "top center",
+        end: `${scrollZ}`,
+        // onUpdate: () => {
+        //   frames.forEach((_, idx) => {
+        //     let frame = frames[idx],
+        //       opacity = this.zVals[idx] < this.zSpacing / -1.7 ? 1 : 0;
+        //     frame.setAttribute(
+        //       "style",
+        //       `opacity: ${opacity}`
+        //     );
+        //   });
+        // },
+      },
+    });
 
-        frame.setAttribute(
-          "style",
-          `transform: ${transform}; opacity: ${opacity}`
-        );
-      });
-    };
-
-    window.scrollTo(0, 1);
-
-    // Audio
-
+    this.startPostitonInit()
+    
     let soundButton = document.querySelector(".soundbutton"),
       audio = document.querySelector(".audio");
 
@@ -174,6 +181,20 @@ export default {
     window.onblur = function () {
       audio.pause();
     };
+  },
+  methods: {
+    startPostitonInit() {
+      if ( !this.$refs.frame ) return
+      this.$refs.frame.forEach((_, idx) => {
+        let frame = frames[idx],
+          transformZ = `translateZ(${this.zVals[idx]}px)`,
+          opacity = this.zVals[idx] < this.zSpacing / -1.7 ? 1 : 0;
+        frame.setAttribute(
+          "style",
+          `transform: ${transformZ}; opacity: ${opacity}`
+        );
+      });
+    },
   },
 };
 </script>
@@ -194,12 +215,12 @@ export default {
 }
 
 /* Скрываем Scrollbar */
-body {
-  scrollbar-width: none; /* Firefox */
-}
-body::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
-}
+// body {
+//   scrollbar-width: none; /* Firefox */
+// }
+// body::-webkit-scrollbar {
+//   display: none; /* Safari and Chrome */
+// }
 
 @font-face {
   font-family: raleway_c;
@@ -223,7 +244,7 @@ body::-webkit-scrollbar {
 .container {
   width: 100%;
   height: 100%;
-  position: fixed;
+  // position: fixed;
   perspective: 1500px;
 }
 .gallery {
